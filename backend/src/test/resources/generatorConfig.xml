@@ -1,0 +1,25 @@
+<!DOCTYPE generatorConfiguration PUBLIC
+        "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <context id="simple" targetRuntime="MyBatis3Simple">
+        <plugin type="org.mybatis.generator.plugins.SpringDataAnnotationPlugin" />
+
+        <commentGenerator>
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>
+
+        <jdbcConnection driverClass="com.clickhouse.jdbc.ClickHouseDriver"
+                        connectionURL="jdbc:clickhouse://47.94.96.234:18123"
+                        userId="root"
+                        password="P7HtW800kgmx"/>
+
+        <javaTypeResolver>
+            <property name="useJSR310Types" value="true" />
+        </javaTypeResolver>
+
+        <javaModelGenerator targetPackage="com.g.fot" targetProject="src/main/java"/>
+
+        <table tableName="airport"/>
+    </context>
+</generatorConfiguration>
