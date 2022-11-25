@@ -20,6 +20,7 @@
 
         <javaModelGenerator targetPackage="com.g.fot" targetProject="src/main/java"/>
 
-        <table tableName="airport"/>
+        <table tableName="airlines"/>
+        <table tableName="flight"/>
     </context>
 </generatorConfiguration>
