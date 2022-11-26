@@ -1,0 +1,19 @@
+### countAll
+GET http://localhost:8080/countAll?source=广州&destination=北京
+Accept: application/json
+
+### countByAirlines
+GET http://localhost:8080/countByAirlines?source=广州&destination=北京
+Accept: application/json
+
+### countByHour
+GET http://localhost:8080/countByHour?source=广州&destination=北京
+Accept: application/json
+
+### findTop
+GET http://localhost:8080/findTop?source=广州&destination=北京
+Accept: application/json
+
+### findBottom
+GET http://localhost:8080/findBottom?source=广州&destination=北京
+Accept: application/json
