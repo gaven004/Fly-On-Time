@@ -13,10 +13,17 @@ import reactor.core.publisher.Mono;
 public class FotController {
     private final FlightRepository flightRepository;
     private final AirlinesRepository airlinesRepository;
+    private final AirportRepository airportRepository;
 
-    public FotController(FlightRepository flightRepository, AirlinesRepository airlinesRepository) {
+    public FotController(FlightRepository flightRepository, AirlinesRepository airlinesRepository, AirportRepository airportRepository) {
         this.flightRepository = flightRepository;
         this.airlinesRepository = airlinesRepository;
+        this.airportRepository = airportRepository;
+    }
+
+    @GetMapping(value = "cities", produces = "application/json")
+    public Iterable<String> getCities() {
+        return airportRepository.findDistinctCity();
     }
 
     @GetMapping(value = "/countAll", produces = "application/json")
@@ -25,6 +32,9 @@ public class FotController {
             return Mono.empty();
         }
 
+        /**
+         * Possibly blocking call in non-blocking context could lead to thread starvation
+         */
         final Optional<FlightStat> flightStat = flightRepository.countAll(source, destination);
         return flightStat.map(Mono::just)
                 .orElse(Mono.empty());

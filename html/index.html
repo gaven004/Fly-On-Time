@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+  <!--<base href="../" />-->
+
+  <title>Fly On Time - 准时到达</title>
+
+  <!-- include common vendor stylesheets & fontawesome -->
+  <link rel="stylesheet" type="text/css" href="vendor/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+
+  <link rel="stylesheet" type="text/css" href="vendor/fontawesome-free@5.15.3/css/fontawesome.min.css">
+  <link rel="stylesheet" type="text/css" href="vendor/fontawesome-free@5.15.3/css/regular.min.css">
+  <link rel="stylesheet" type="text/css" href="vendor/fontawesome-free@5.15.3/css/brands.min.css">
+  <link rel="stylesheet" type="text/css" href="vendor/fontawesome-free@5.15.3/css/solid.min.css">
+
+  <!-- include fonts -->
+  <link rel="stylesheet" type="text/css" href="vendor/opensans/opensans.css">
+
+  <!-- ace.css -->
+  <link rel="stylesheet" type="text/css" href="css/ace.min.css">
+
+  <!-- favicon -->
+  <link rel="icon" type="image/png" href="img/favicon.png"/>
+
+  <!-- "Landing Page 2" page styles, specific to this page for demo only -->
+  <style>html {
+    --navbar-height: 5rem;
+    --navbar-sm-height: 3.5rem;
+  }
+
+  /**
+    See @page-script.js
+  */
+  #scroll-down {
+    top: 25vh;
+  }
+
+  /* if our ace.css is compiled using sticky: true, then we should make it position: fixed again to fix a few glitches */
+  .navbar-fixed {
+    position: relative;
+  }
+
+  .navbar-compact {
+    height: 5rem;
+  }
+
+  .navbar-inner {
+    transition: height 250ms;
+  }
+
+  .navbar-compact .navbar-inner {
+    height: 3.5rem;
+  }
+
+  .navbar-fixed .navbar-inner {
+    position: fixed;
+    top: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .navbar-inner {
+      transition: none;
+    }
+  }
+
+
+  .page-intro {
+    background-repeat: no-repeat;
+    background-position: center 1.5rem;
+    background-size: 100% auto;
+    background-attachment: fixed;
+  }
+
+  /* change background position and size according to window size */
+  @media (max-width: 1800px) {
+    .page-intro {
+      background-size: auto 480px;
+    }
+  }
+
+  @media (max-width: 1199.98px) {
+    .page-intro {
+      background-size: auto 420px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .page-intro {
+      background-position: -50vw 1rem;
+    }
+  }
+
+  @media (max-width: 450px) {
+    .page-intro {
+      background-position: -100vw 1rem;
+    }
+  }
+
+
+  .footer {
+    background: url('img/travel-footer.jpg') no-repeat center;
+    background-size: auto;
+    background-attachment: fixed;
+    background-position: bottom;
+  }
+
+  @media (max-width: 1000px) {
+    .footer {
+      background-size: auto 80%;
+    }
+  }
+
+  @media (max-width: 450px) {
+    .footer {
+      background-position: 60% 60%;
+      background-size: auto 100%;
+    }
+  }
+  </style>
+  <link rel="stylesheet" type="text/css" href="css/ace-themes.min.css">
+
+</head>
+
+<body>
+<div class="body-container">
+  <div class="pos-abs" id="scroll-down"></div>
+
+  <nav class="navbar navbar-fixed navbar-expand-lg navbar-white">
+    <div class="navbar-inner shadow-sm border-b-1 brc-grey-l2">
+      <div class="container">
+
+        <div class="navbar-intro justify-content-xl-between w-auto border-0">
+          <a class="navbar-brand text-dark-tp3 text-180" href="#">
+            <i class="fa fa-plane rotate-n45 text-105 text-blue-m1 mr-1"></i>
+            <span>Fly On Time</span>
+            <span class="text-70">准时到达</span>
+          </a><!-- /.navbar-brand -->
+        </div><!-- /.navbar-intro -->
+
+        <div class="navbar-menu collapse navbar-collapse navbar-backdrop " id="navbarMenu2">
+          <div class="navbar-nav">
+            <ul class="nav">
+              <li class="nav-item dropdown px-lg-2 d-lg-flex flex-column justify-content-center">
+                <a
+                  class="d-none d-lg-block h-auto btn btn-outline-blue btn-bold radius-round border-2 dropdown-toggle px-2 px-xl-4"
+                  href="https://github.com/gaven004/Fly-On-Time" role="button">
+                  <i class="fab fa-github fa-lg mr-2 f-n-hover"></i>
+                  Source Code
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /.navbar-inner -->
+  </nav>
+  <div class="main-container bgc-white">
+
+    <div role="main" class="main-content">
+      <div class="page-content p-0">
+        <div class="page-intro row pos-rel pt-lg-1 pt-xl-4"
+             style="background-image: url('img/travel-header.jpg')">
+          <div class="col-11 col-lg-8 col-xl-7 mx-auto text-center py-4 py-lg-5 d-flex flex-column justify-content-end">
+            <div class="bgc-black-tp4 radius-1 pt-2 pt-lg-4 pb-3 pb-lg-5 px-2">
+
+              <div class="text-yellow-l4 text-140">
+                输入你感兴趣的城市，查看航班的准点率
+              </div>
+
+              <div class="mt-4 col-md-6 offset-md-3">
+                <form>
+                  <div class="input-group">
+                    <input type="text" class="form-control form-control-lg shadow-none border-0"
+                           placeholder="出发地"/>
+                    <div class="input-group-append">
+                      <button class="btn btn-white btn-bold" type="button">
+                        <i class="fas fa-arrows-alt-h fa-lg f-n-hover"></i>
+                      </button>
+                    </div>
+                    <input type="text" class="form-control form-control-lg shadow-none border-0"
+                           placeholder="目的地"/>
+                    <div class="input-group-append">
+                      <button class="btn btn-blue btn-bold" type="button">Start</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="py-3 mt-3 bgc-white">
+          <div class="container container-plus py-2 py-lg-4 text-center">
+
+            <h2 class="text-primary mb-2 text-190">
+              统计总航班数：7,518,638
+            </h2>
+
+            <div class="text-dark-l1 text-110">
+              根据2015年5月到2017年5月航班动态数据统计，非正式！
+            </div>
+
+            <div class="row mt-4">
+              <div class="col-12 col-lg-11 col-xl-9 mx-auto">
+
+                <div class="row my-4">
+                  <div class="col-12 col-md-4 mb-4 mb-md-0 pb-2 pb-md-0">
+                    <div
+                      class="d-inline-block text-center bgc-green-l4 p-4 radius-round text-150 text- border-2 brc-green-m4 d-style">
+                      69%
+                    </div>
+
+                    <h3 class="text-grey-d3 text-140 my-2 my-md-3">
+                      准点
+                    </h3>
+
+                    <p class="text-dark-m3">
+                      5,176,806班
+                    </p>
+                  </div>
+
+                  <div class="col-12 col-md-4 mb-4 mb-md-0 pb-2 pb-md-0">
+                    <div
+                      class="d-inline-block text-center bgc-orange-l4 p-4 radius-round text-150 border-2 brc-orange-l1 d-style">
+                      27%
+                    </div>
+
+                    <h3 class="text-grey-d3 text-140 my-2 my-md-3">
+                      延误
+                    </h3>
+
+                    <p class="text-dark-m3">
+                      2,018,479班
+                    </p>
+                  </div>
+
+                  <div class="col-12 col-md-4">
+                    <div
+                      class="d-inline-block text-center bgc-red-l4 p-4 radius-round text-150 border-2 brc-red-m4 d-style">
+                      &nbsp;4%&nbsp;
+                    </div>
+
+                    <h3 class="text-grey-d3 text-140 my-2 my-md-3">
+                      取消
+                    </h3>
+
+                    <p class="text-dark-m3">
+                      323,353班
+                    </p>
+                  </div>
+                </div><!-- /.row -->
+
+              </div><!-- /.col -->
+            </div><!-- /.row -->
+
+          </div><!-- /.container -->
+        </div>
+
+        <div class="bgc-blue-l4">
+          <div class="container container-plus py-45">
+            <div class="row">
+              <div class="col-12 col-lg-8 mx-auto">
+                <div class="d-flex flex-column align-items-center flex-md-row align-items-md-center">
+                  <div class="flex-grow-1 text-dark-m3 mt-4 mt-md-0">
+                    <h3 class="text-dark-m3 text-center text-md-left mb-4">
+                      最优航班
+                    </h3>
+                    <table id="top-table" class="mb-0 table table-borderless table-bordered-x brc-secondary-l3 text-dark-m2 radius-1 overflow-hidden">
+                      <thead class="text-dark-tp3 bgc-grey-l4 text-90 border-b-1 brc-transparent">
+                      <tr>
+                        <th class="text-center">
+                          航班
+                        </th>
+                        <th class="text-center">
+                          总计
+                        </th>
+                        <th class="text-center">
+                          准点
+                        </th>
+                        <th class="text-center">
+                          延误
+                        </th>
+                        <th class="text-center">
+                          取消
+                        </th>
+                        <th class="text-center">
+                          准点率
+                        </th>
+                        <th class="text-center">
+                          延误率
+                        </th>
+                        <th class="text-center">
+                          取消率
+                        </th>
+                      </tr>
+                      </thead>
+
+                      <tbody class="mt-1">
+                      <tr class="bgc-h-yellow-l4 d-style">
+                        <td>
+                          <div class="text-blue-d1 text-600 text-95">MU9739</div>
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          126
+                        </td>
+                        <td class="text-600 text-orange-d2 text-right">
+                          125
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          1
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          0
+                        </td>
+                        <td class="text-600 text-orange-d2 text-right">
+                          99%
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          1%
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          0%
+                        </td>
+                      </tr>
+                      <tr class="bgc-h-yellow-l4 d-style">
+                        <td>
+                          <div class="text-blue-d1 text-600 text-95">JD5203</div>
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          127
+                        </td>
+                        <td class="text-600 text-orange-d2 text-right">
+                          125
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          1
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          1
+                        </td>
+                        <td class="text-600 text-orange-d2 text-right">
+                          98%
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          1%
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          1%
+                        </td>
+                      </tr>
+                      <tr class="bgc-h-yellow-l4 d-style">
+                        <td>
+                          <div class="text-blue-d1 text-600 text-95">CZ6101</div>
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          753
+                        </td>
+                        <td class="text-600 text-orange-d2 text-right">
+                          740
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          19
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          3
+                        </td>
+                        <td class="text-600 text-orange-d2 text-right">
+                          98%
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          1%
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          1%
+                        </td>
+                      </tr>
+                      <tr class="bgc-h-yellow-l4 d-style">
+                        <td>
+                          <div class="text-blue-d1 text-600 text-95">ZH9967</div>
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          214
+                        </td>
+                        <td class="text-600 text-orange-d2 text-right">
+                          210
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          4
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          0
+                        </td>
+                        <td class="text-600 text-orange-d2 text-right">
+                          98%
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          2%
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          0%
+                        </td>
+                      </tr>
+                      <tr class="bgc-h-yellow-l4 d-style">
+                        <td>
+                          <div class="text-blue-d1 text-600 text-95">BK2970</div>
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          198
+                        </td>
+                        <td class="text-600 text-orange-d2 text-right">
+                          194
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          4
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          0
+                        </td>
+                        <td class="text-600 text-orange-d2 text-right">
+                          98%
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          2%
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          0%
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div><!-- /.col -->
+            </div><!-- /.row -->
+          </div><!-- /.container -->
+        </div>
+
+        <div>
+          <div class="container container-plus py-45">
+            <div class="row">
+              <div class="col-12 col-lg-8 mx-auto">
+                <div class="d-flex flex-column align-items-center flex-md-row align-items-md-center">
+                  <div class="flex-grow-1 text-dark-m3 mt-4 mt-md-0">
+                    <h3 class="text-dark-m3 text-center text-md-right mb-4">
+                      最差航班
+                    </h3>
+                    <table id="bottom-table" class="mb-0 table table-borderless table-bordered-x brc-secondary-l3 text-dark-m2 radius-1 overflow-hidden">
+                      <thead class="text-dark-tp3 bgc-grey-l4 text-90 border-b-1 brc-transparent">
+                      <tr>
+                        <th class="text-center">
+                          航班
+                        </th>
+                        <th class="text-center">
+                          总计
+                        </th>
+                        <th class="text-center">
+                          准点
+                        </th>
+                        <th class="text-center">
+                          延误
+                        </th>
+                        <th class="text-center">
+                          取消
+                        </th>
+                        <th class="text-center">
+                          准点率
+                        </th>
+                        <th class="text-center">
+                          延误率
+                        </th>
+                        <th class="text-center">
+                          取消率
+                        </th>
+                      </tr>
+                      </thead>
+
+                      <tbody class="mt-1">
+                      <tr class="bgc-h-yellow-l4 d-style">
+                        <td>
+                          <div class="text-blue-d1 text-600 text-95">PN5614</div>
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          522
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          0
+                        </td>
+                        <td class="text-600 text-orange-d2 text-right">
+                          0
+                        </td>
+                        <td class="text-600 text-danger-d1 text-right">
+                          522
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          0%
+                        </td>
+                        <td class="text-600 text-orange-d2 text-right">
+                          0%
+                        </td>
+                        <td class="text-600 text-danger-d1 text-right">
+                          100%
+                        </td>
+                      </tr>
+                      <tr class="bgc-h-yellow-l4 d-style">
+                        <td>
+                          <div class="text-blue-d1 text-600 text-95">FU6573</div>
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          353
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          0
+                        </td>
+                        <td class="text-600 text-orange-d2 text-right">
+                          0
+                        </td>
+                        <td class="text-600 text-danger-d1 text-right">
+                          353
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          0%
+                        </td>
+                        <td class="text-600 text-orange-d2 text-right">
+                          0%
+                        </td>
+                        <td class="text-600 text-danger-d1 text-right">
+                          100%
+                        </td>
+                      </tr>
+                      <tr class="bgc-h-yellow-l4 d-style">
+                        <td>
+                          <div class="text-blue-d1 text-600 text-95">FU6553</div>
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          248
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          0
+                        </td>
+                        <td class="text-600 text-orange-d2 text-right">
+                          0
+                        </td>
+                        <td class="text-600 text-danger-d1 text-right">
+                          248
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          0%
+                        </td>
+                        <td class="text-600 text-orange-d2 text-right">
+                          0%
+                        </td>
+                        <td class="text-600 text-danger-d1 text-right">
+                          100%
+                        </td>
+                      </tr>
+                      <tr class="bgc-h-yellow-l4 d-style">
+                        <td>
+                          <div class="text-blue-d1 text-600 text-95">GJ8832</div>
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          173
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          0
+                        </td>
+                        <td class="text-600 text-orange-d2 text-right">
+                          0
+                        </td>
+                        <td class="text-600 text-danger-d1 text-right">
+                          173
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          0%
+                        </td>
+                        <td class="text-600 text-orange-d2 text-right">
+                          0%
+                        </td>
+                        <td class="text-600 text-danger-d1 text-right">
+                          100%
+                        </td>
+                      </tr>
+                      <tr class="bgc-h-yellow-l4 d-style">
+                        <td>
+                          <div class="text-blue-d1 text-600 text-95">UQ2001</div>
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          132
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          0
+                        </td>
+                        <td class="text-600 text-orange-d2 text-right">
+                          0
+                        </td>
+                        <td class="text-600 text-danger-d1 text-right">
+                          132
+                        </td>
+                        <td class="d-none d-sm-table-cell text-grey-d1 text-right">
+                          0%
+                        </td>
+                        <td class="text-600 text-orange-d2 text-right">
+                          0%
+                        </td>
+                        <td class="text-600 text-danger-d1 text-right">
+                          100%
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div><!-- /.col -->
+            </div><!-- /.row -->
+          </div><!-- /.container -->
+        </div>
+
+        <div class="bgc-blue-l4 pb-3">
+          <div class="container container-plus py-5">
+            <h3 class="text-center text-dark-tp3 text-160 mb-5">分时段数据</h3>
+            <div>
+              <div class="row justify-content-center mx-1 mx-lg-0 mt-3">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="container container-plus py-5">
+            <h3 class="text-center text-dark-tp3 text-160 mb-5">分航空公司数据</h3>
+            <div>
+              <div class="row justify-content-center mx-1 mx-lg-0 mt-3">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bgc-blue-l4">
+          <div class="container container-plus py-45">
+            <div class="row">
+              <div class="col-12 col-lg-8 mx-auto">
+                <div class="d-flex flex-column align-items-center flex-md-row align-items-md-center">
+
+                  <div class="flex-grow-1 text-dark-m3 mt-4 mt-md-0">
+                    <h3 class="text-dark-m3 text-center text-md-left mb-4">
+                      关于
+                    </h3>
+
+                    <p>
+                      这是一个练习作品，按历史的航班动态数据，以出发地及目的地为统计口径，统计历史的准点率、延误率等，供出行参考，选择合适的出行时段和航班。
+                    </p>
+                    <p>
+                      数据来源于
+                      <a href="https://www.heywhale.com/">和鲸社区</a> 的
+                      <a href="https://www.heywhale.com/mw/dataset/59793a5a0d84640e9b2fedd3">携程机票航班延误预测算法大赛数据集</a>，
+                      数据集协议：CC-BY 4.0 转载需署名
+                    </p>
+                    <p>
+                      数据导入ClickHouse，使用Spring JDBC集成，前端以纯HTML、Bootstrap实现，相对简单，项目共享在Github，欢迎有兴趣的朋友一起参与完善。
+                    </p>
+                  </div>
+
+                  <div
+                    class="radius-2 mt-1 ml-md-4 shadow-sm border-1 p-2px brc-default-l1 bgc-white order-first order-md-last">
+                    <div class="overflow-hidden radius-1">
+                      <img alt="Travel image" src="img/travel2.jpg" class="dh-zoom-2"/>
+                    </div>
+                  </div>
+                </div>
+              </div><!-- /.col -->
+            </div><!-- /.row -->
+          </div><!-- /.container -->
+        </div>
+
+        <div class="h-auto text-white"
+             style="background-image: url('img/travel-footer.jpg')">
+          <div class="footer-inner bgc-black-tp4 pt-3 pb-5">
+            <div class="container container-plus">
+              <div class="text-center mt-45">
+                <span class="text-white">
+                  Copyright &copy; 2022 G. Company
+                </span>
+                <div class="text-150 mt-2">
+                  <i class="bgc-black-tp6 p-25 radius-round fab fa-twitter text-blue-l2 mx-1"></i>
+                  <i class="bgc-black-tp6 p-25 radius-round fab fa-facebook text-blue-m2 mx-1"></i>
+                  <i class="bgc-black-tp6 p-25 radius-round fab fa-instagram text-purple-m3 mx-1"></i>
+                </div>
+              </div>
+            </div><!-- /.container -->
+          </div><!-- /.footer-inner -->
+        </div><!-- /.footer -->
+
+        <div class="footer-tools">
+          <a href="#"
+             class="btn-scroll-up btn btn-blue px-25 py-2 text-95 border-2 radius-round mb-2 mr-2">
+            <i class="fa fa-arrow-up w-2 h-2"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- include common vendor scripts used in demo pages -->
+<script src="vendor/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="vendor/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="vendor/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
+
+<!-- include ace.js -->
+<script src="js/ace.min.js"></script>
+
+<!-- "Landing Page 2" page script to enable its demo functionality -->
+<script>
+  jQuery(function ($) {
+
+    // instead of listening to window `scroll` event, we use `IntersectionObserver`
+    // to observe an element and determine when it becomes visible/invisible during scrolling
+
+    // when we scroll down, navbar becomes fixed
+    // we use a hidden element (#scroll-down) to determine when to do the above
+
+    if (window.IntersectionObserver) {
+      var observer = new window.IntersectionObserver(function (entries) {
+        var entry = entries[0];
+        var isOut = entry.intersectionRatio < 1 && entry.boundingClientRect.y < 0
+        if (isOut) {
+          $('.navbar').addClass('navbar-compact')
+        } else {
+          $('.navbar').removeClass('navbar-compact')
+        }
+      }, {
+        threshold: [1.0],
+        delay: 100
+      })
+
+      observer.observe(document.getElementById('scroll-down'))
+    }
+  })
+</script>
+</body>
+
+</html>

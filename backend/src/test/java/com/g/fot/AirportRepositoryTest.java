@@ -17,4 +17,11 @@ class AirportRepositoryTest {
         assertNotNull(airports);
         airports.forEach(System.out::println);
     }
+
+    @Test
+    void findCities() {
+        final Iterable<String> cities = repository.findDistinctCity();
+        assertNotNull(cities);
+        cities.forEach(System.out::println);
+    }
 }
