@@ -18,7 +18,15 @@ Accept: application/json
 GET http://localhost:8080/findBottom?source=广州&destination=北京
 Accept: application/json
 
+### findBottom
+GET http://47.94.96.234:8080/findBottom?source=广州&destination=北京
+Accept: application/json
+
 ### get cities
 GET http://localhost:8080/cities
+Accept: application/json
+
+### get cities
+GET http://47.94.96.234:8080/cities
 Accept: application/json
 

@@ -16,8 +16,10 @@ public interface FlightRepository extends PagingAndSortingRepository<Flight, Str
                    delays / total                                                                                as rod,
                    cancellations / total                                                                         as roc
             from flight
-            where departure_airport in (select iata_code from airport where city = :source)
-              and landing_airport in (select iata_code from airport where city = :destination)""")
+            where (departure_airport in (select iata_code from airport where city = :source)
+                or '' = :source)
+              and (landing_airport in (select iata_code from airport where city = :destination)
+                or '' = :destination)""")
     Optional<FlightStat> countAll(String source, String destination);
 
     @Query("""
@@ -30,8 +32,10 @@ public interface FlightRepository extends PagingAndSortingRepository<Flight, Str
                    delays / total                                                                                as rod,
                    cancellations / total                                                                         as roc
             from flight
-            where departure_airport in (select iata_code from airport where city = :source)
-              and landing_airport in (select iata_code from airport where city = :destination)
+            where (departure_airport in (select iata_code from airport where city = :source)
+                or '' = :source)
+              and (landing_airport in (select iata_code from airport where city = :destination)
+                or '' = :destination)
             group by substring(flight_schedules, 1, 2)
             having total > 100
             order by otp desc""")
@@ -47,8 +51,10 @@ public interface FlightRepository extends PagingAndSortingRepository<Flight, Str
                    delays / total                                                                                as rod,
                    cancellations / total                                                                         as roc
             from flight
-            where departure_airport in (select iata_code from airport where city = :source)
-              and landing_airport in (select iata_code from airport where city = :destination)
+            where (departure_airport in (select iata_code from airport where city = :source)
+                or '' = :source)
+              and (landing_airport in (select iata_code from airport where city = :destination)
+                or '' = :destination)
             group by toHour(schedule_departure_time)
             order by category""")
     Iterable<FlightStat> countByHour(String source, String destination);
@@ -63,8 +69,10 @@ public interface FlightRepository extends PagingAndSortingRepository<Flight, Str
                    delays / total                                                                                as rod,
                    cancellations / total                                                                         as roc
             from flight
-            where departure_airport in (select iata_code from airport where city = :source)
-              and landing_airport in (select iata_code from airport where city = :destination)
+            where (departure_airport in (select iata_code from airport where city = :source)
+                or '' = :source)
+              and (landing_airport in (select iata_code from airport where city = :destination)
+                or '' = :destination)
             group by flight_schedules
             having total > 100
             order by otp desc
@@ -81,8 +89,10 @@ public interface FlightRepository extends PagingAndSortingRepository<Flight, Str
                    delays / total                                                                                as rod,
                    cancellations / total                                                                         as roc
             from flight
-            where departure_airport in (select iata_code from airport where city = :source)
-              and landing_airport in (select iata_code from airport where city = :destination)
+            where (departure_airport in (select iata_code from airport where city = :source)
+                or '' = :source)
+              and (landing_airport in (select iata_code from airport where city = :destination)
+                or '' = :destination)
             group by flight_schedules
             having total > 100
             order by otp

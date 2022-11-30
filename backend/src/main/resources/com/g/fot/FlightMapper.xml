@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.g.fot.FlightMapper">
+    <select id="countAll" resultType="com.g.fot.FlightStat">
+        <![CDATA[
+        select
+            count()                                                                                       as total,
+            countIf(status != '取消' and actual_landing_time <= (flight.schedule_landing_time + 15 * 60)) as ontimes,
+            countIf(status != '取消' and actual_landing_time > (flight.schedule_landing_time + 15 * 60))  as delays,
+            countIf(status = '取消')                                                                      as cancellations,
+            ontimes / total                                                                               as otp,
+            delays / total                                                                                as rod,
+            cancellations / total                                                                         as roc
+        from flight
+        ]]>
+        <where>
+            <if test="null != source and '' != source">
+                departure_airport in (select iata_code from airport where city = #{source})
+            </if>
+            <if test="null != destination and '' != destination">
+                and landing_airport in (select iata_code from airport where city = #{destination})
+            </if>
+        </where>
+    </select>
+
+    <select id="countByAirlines" resultType="com.g.fot.FlightStat">
+        <![CDATA[
+        select
+            substring(flight_schedules, 1, 2)                                                             as category,
+            count()                                                                                       as total,
+            countIf(status != '取消' and actual_landing_time <= (flight.schedule_landing_time + 15 * 60)) as ontimes,
+            countIf(status != '取消' and actual_landing_time > (flight.schedule_landing_time + 15 * 60))  as delays,
+            countIf(status = '取消')                                                                      as cancellations,
+            ontimes / total                                                                               as otp,
+            delays / total                                                                                as rod,
+            cancellations / total                                                                         as roc
+        from flight
+        ]]>
+        <where>
+            <if test="null != source and '' != source">
+                departure_airport in (select iata_code from airport where city = #{source})
+            </if>
+            <if test="null != destination and '' != destination">
+                and landing_airport in (select iata_code from airport where city = #{destination})
+            </if>
+        </where>
+        group by substring(flight_schedules, 1, 2)
+        having total > 100
+        order by otp desc, rod desc
+    </select>
+
+    <select id="countByHour" resultType="com.g.fot.FlightStat">
+        <![CDATA[
+        select
+            toHour(schedule_departure_time)                                                             as category,
+            count()                                                                                       as total,
+            countIf(status != '取消' and actual_landing_time <= (flight.schedule_landing_time + 15 * 60)) as ontimes,
+            countIf(status != '取消' and actual_landing_time > (flight.schedule_landing_time + 15 * 60))  as delays,
+            countIf(status = '取消')                                                                      as cancellations,
+            ontimes / total                                                                               as otp,
+            delays / total                                                                                as rod,
+            cancellations / total                                                                         as roc
+        from flight
+        ]]>
+        <where>
+            <if test="null != source and '' != source">
+                departure_airport in (select iata_code from airport where city = #{source})
+            </if>
+            <if test="null != destination and '' != destination">
+                and landing_airport in (select iata_code from airport where city = #{destination})
+            </if>
+        </where>
+        group by toHour(schedule_departure_time)
+        order by category
+    </select>
+
+    <select id="findTopFlight" resultType="com.g.fot.FlightStat">
+        <![CDATA[
+        select
+            flight_schedules                                                                              as category,
+            count()                                                                                       as total,
+            countIf(status != '取消' and actual_landing_time <= (flight.schedule_landing_time + 15 * 60)) as ontimes,
+            countIf(status != '取消' and actual_landing_time > (flight.schedule_landing_time + 15 * 60))  as delays,
+            countIf(status = '取消')                                                                      as cancellations,
+            ontimes / total                                                                               as otp,
+            delays / total                                                                                as rod,
+            cancellations / total                                                                         as roc
+        from flight
+        ]]>
+        <where>
+            <if test="null != source and '' != source">
+                departure_airport in (select iata_code from airport where city = #{source})
+            </if>
+            <if test="null != destination and '' != destination">
+                and landing_airport in (select iata_code from airport where city = #{destination})
+            </if>
+        </where>
+        group by flight_schedules
+        having total > 100
+        order by otp desc, rod desc
+        limit 5
+    </select>
+
+    <select id="findBottomFlight" resultType="com.g.fot.FlightStat">
+        <![CDATA[
+        select
+            flight_schedules                                                                              as category,
+            count()                                                                                       as total,
+            countIf(status != '取消' and actual_landing_time <= (flight.schedule_landing_time + 15 * 60)) as ontimes,
+            countIf(status != '取消' and actual_landing_time > (flight.schedule_landing_time + 15 * 60))  as delays,
+            countIf(status = '取消')                                                                      as cancellations,
+            ontimes / total                                                                               as otp,
+            delays / total                                                                                as rod,
+            cancellations / total                                                                         as roc
+        from flight
+        ]]>
+        <where>
+            <if test="null != source and '' != source">
+                departure_airport in (select iata_code from airport where city = #{source})
+            </if>
+            <if test="null != destination and '' != destination">
+                and landing_airport in (select iata_code from airport where city = #{destination})
+            </if>
+        </where>
+        group by flight_schedules
+        having total > 100
+        order by otp, rod
+        limit 5
+    </select>
+</mapper>

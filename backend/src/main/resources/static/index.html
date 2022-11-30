@@ -25,101 +25,7 @@
   <!-- favicon -->
   <link rel="icon" type="image/png" href="img/favicon.png"/>
 
-  <!-- "Landing Page 2" page styles, specific to this page for demo only -->
-  <style>html {
-    --navbar-height: 5rem;
-    --navbar-sm-height: 3.5rem;
-  }
-
-  /**
-    See @page-script.js
-  */
-  #scroll-down {
-    top: 25vh;
-  }
-
-  /* if our ace.css is compiled using sticky: true, then we should make it position: fixed again to fix a few glitches */
-  .navbar-fixed {
-    position: relative;
-  }
-
-  .navbar-compact {
-    height: 5rem;
-  }
-
-  .navbar-inner {
-    transition: height 250ms;
-  }
-
-  .navbar-compact .navbar-inner {
-    height: 3.5rem;
-  }
-
-  .navbar-fixed .navbar-inner {
-    position: fixed;
-    top: 0;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .navbar-inner {
-      transition: none;
-    }
-  }
-
-
-  .page-intro {
-    background-repeat: no-repeat;
-    background-position: center 1.5rem;
-    background-size: 100% auto;
-    background-attachment: fixed;
-  }
-
-  /* change background position and size according to window size */
-  @media (max-width: 1800px) {
-    .page-intro {
-      background-size: auto 480px;
-    }
-  }
-
-  @media (max-width: 1199.98px) {
-    .page-intro {
-      background-size: auto 420px;
-    }
-  }
-
-  @media (max-width: 700px) {
-    .page-intro {
-      background-position: -50vw 1rem;
-    }
-  }
-
-  @media (max-width: 450px) {
-    .page-intro {
-      background-position: -100vw 1rem;
-    }
-  }
-
-
-  .footer {
-    background: url('img/travel-footer.jpg') no-repeat center;
-    background-size: auto;
-    background-attachment: fixed;
-    background-position: bottom;
-  }
-
-  @media (max-width: 1000px) {
-    .footer {
-      background-size: auto 80%;
-    }
-  }
-
-  @media (max-width: 450px) {
-    .footer {
-      background-position: 60% 60%;
-      background-size: auto 100%;
-    }
-  }
-  </style>
+  <link rel="stylesheet" type="text/css" href="css/index.css">
   <link rel="stylesheet" type="text/css" href="css/ace-themes.min.css">
 
 </head>
@@ -179,7 +85,7 @@
                              placeholder="出发地"/>
                     </div>
                     <div class="input-group-append">
-                      <button class="btn btn-white btn-bold" type="button">
+                      <button id="swap" class="btn btn-white btn-bold" type="button">
                         <i class="fas fa-arrows-alt-h fa-lg f-n-hover"></i>
                       </button>
                     </div>
@@ -187,7 +93,7 @@
                       <input id="destination" type="text" class="form-control form-control-lg shadow-none border-0 typeahead"
                              placeholder="目的地"/>
                     </div>
-                    <div class="input-group-append">
+                    <div id="start" class="input-group-append">
                       <button class="btn btn-blue btn-bold" type="button">Start</button>
                     </div>
                   </div>
@@ -202,7 +108,7 @@
           <div class="container container-plus py-2 py-lg-4 text-center">
 
             <h2 class="text-primary mb-2 text-190">
-              统计总航班数：7,518,638
+              统计总航班数：<span id="total">7,518,638</span>
             </h2>
 
             <div class="text-dark-l1 text-110">
@@ -216,7 +122,7 @@
                   <div class="col-12 col-md-4 mb-4 mb-md-0 pb-2 pb-md-0">
                     <div
                       class="d-inline-block text-center bgc-green-l4 p-4 radius-round text-150 text- border-2 brc-green-m4 d-style">
-                      69%
+                      <span id="otp">69%</span>
                     </div>
 
                     <h3 class="text-grey-d3 text-140 my-2 my-md-3">
@@ -224,14 +130,14 @@
                     </h3>
 
                     <p class="text-dark-m3">
-                      5,176,806班
+                      <span id="ontimes">5,176,806</span>班
                     </p>
                   </div>
 
                   <div class="col-12 col-md-4 mb-4 mb-md-0 pb-2 pb-md-0">
                     <div
                       class="d-inline-block text-center bgc-orange-l4 p-4 radius-round text-150 border-2 brc-orange-l1 d-style">
-                      27%
+                      <span id="rod">27%</span>
                     </div>
 
                     <h3 class="text-grey-d3 text-140 my-2 my-md-3">
@@ -239,14 +145,14 @@
                     </h3>
 
                     <p class="text-dark-m3">
-                      2,018,479班
+                      <span id="delays">2,018,479</span>班
                     </p>
                   </div>
 
                   <div class="col-12 col-md-4">
                     <div
                       class="d-inline-block text-center bgc-red-l4 p-4 radius-round text-150 border-2 brc-red-m4 d-style">
-                      &nbsp;4%&nbsp;
+                      <span id="roc">&nbsp;4%&nbsp;</span>
                     </div>
 
                     <h3 class="text-grey-d3 text-140 my-2 my-md-3">
@@ -254,7 +160,7 @@
                     </h3>
 
                     <p class="text-dark-m3">
-                      323,353班
+                      <span id="cancellations">323,353</span>班
                     </p>
                   </div>
                 </div><!-- /.row -->
@@ -724,86 +630,8 @@
 <script src="js/ace.min.js"></script>
 
 <!-- "Landing Page 2" page script to enable its demo functionality -->
-<script>
-  jQuery(function ($) {
-    // typeahead.js
-    // example taken from plugin's page at: https://twitter.github.io/typeahead.js/examples/
-    const substringMatcher = function (strs) {
-      return function findMatches(q, cb) {
-        var matches, substringRegex;
+<script src="js/index.js"></script>
 
-        // an array that will be populated with substring matches
-        matches = [];
-
-        // regex used to determine if a string contains the substring `q`
-        substrRegex = new RegExp(q, 'i');
-
-        // iterate through the pool of strings and for any string that
-        // contains the substring `q`, add it to the `matches` array
-        $.each(strs, function (i, str) {
-          if (substrRegex.test(str)) {
-            // the typeahead jQuery plugin expects suggestions to a
-            // JavaScript object, refer to typeahead docs for more info
-            matches.push({
-              value: str
-            });
-          }
-        });
-
-        cb(matches);
-      }
-    };
-
-    fetch('http://localhost:8080/cities', {
-      mode: 'no-cors',
-      headers: {
-        Accept: 'application/json'
-      }
-    })
-      .then((response) => response.json())
-      .then((data) => console.log(data));
-
-    let US_STATES = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Dakota", "North Carolina", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"];
-    $('input.typeahead').typeahead({
-      hint: true,
-      highlight: true,
-      minLength: 1,
-      classNames: {
-        menu: 'dropdown-menu',
-        suggestion: 'dropdown-item',
-        cursor: 'bgc-yellow-m2'
-      }
-    }, {
-      name: 'states',
-      displayKey: 'value',
-      source: substringMatcher(US_STATES),
-      limit: 10
-    })
-
-    // instead of listening to window `scroll` event, we use `IntersectionObserver`
-    // to observe an element and determine when it becomes visible/invisible during scrolling
-
-    // when we scroll down, navbar becomes fixed
-    // we use a hidden element (#scroll-down) to determine when to do the above
-
-    if (window.IntersectionObserver) {
-      var observer = new window.IntersectionObserver(function (entries) {
-        var entry = entries[0];
-        var isOut = entry.intersectionRatio < 1 && entry.boundingClientRect.y < 0
-        if (isOut) {
-          $('.navbar').addClass('navbar-compact')
-        } else {
-          $('.navbar').removeClass('navbar-compact')
-        }
-      }, {
-        threshold: [1.0],
-        delay: 100
-      })
-
-      observer.observe(document.getElementById('scroll-down'))
-    }
-  })
-</script>
 </body>
 
 </html>

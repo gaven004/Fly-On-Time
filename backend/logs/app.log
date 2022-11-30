@@ -1,0 +1,96 @@
+2022-11-30 10:17:24.933  INFO 1015 --- [main] com.g.fot.FlyOnTimeApplication           : Starting FlyOnTimeApplication using Java 17.0.3.1 on 192.168.0.105 with PID 1015 (/Users/gaven/Work/fly on time/backend/target/classes started by gaven in /Users/gaven/Work/fly on time/backend)
+2022-11-30 10:17:24.945  INFO 1015 --- [main] com.g.fot.FlyOnTimeApplication           : No active profile set, falling back to 1 default profile: "default"
+2022-11-30 10:17:25.216  INFO 1015 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2022-11-30 10:17:25.239  INFO 1015 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 21 ms. Found 3 JDBC repository interfaces.
+2022-11-30 10:17:25.493  INFO 1015 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-11-30 10:17:25.497  INFO 1015 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-11-30 10:17:25.497  INFO 1015 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2022-11-30 10:17:25.540  INFO 1015 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-11-30 10:17:25.541  INFO 1015 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 570 ms
+2022-11-30 10:17:26.031  INFO 1015 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2022-11-30 10:17:26.037  INFO 1015 --- [main] com.g.fot.FlyOnTimeApplication           : Started FlyOnTimeApplication in 1.321 seconds (JVM running for 1.974)
+2022-11-30 10:17:38.676  INFO 1015 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-11-30 10:17:38.676  INFO 1015 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2022-11-30 10:17:38.677  INFO 1015 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2022-11-30 10:17:38.710 DEBUG 1015 --- [http-nio-8080-exec-1] o.s.jdbc.core.JdbcTemplate               : Executing prepared SQL query
+2022-11-30 10:17:38.711 DEBUG 1015 --- [http-nio-8080-exec-1] o.s.jdbc.core.JdbcTemplate               : Executing prepared SQL statement [select
+       count()                                                                                       as total,
+       countIf(status != '取消' and actual_landing_time <= (flight.schedule_landing_time + 15 * 60)) as ontimes,
+       countIf(status != '取消' and actual_landing_time > (flight.schedule_landing_time + 15 * 60))  as delays,
+       countIf(status = '取消')                                                                      as cancellations,
+       ontimes / total                                                                               as otp,
+       delays / total                                                                                as rod,
+       cancellations / total                                                                         as roc
+from flight
+where departure_airport in (select iata_code from airport where city = ?)
+  and landing_airport in (select iata_code from airport where city = ?)]
+2022-11-30 10:17:44.710 DEBUG 1015 --- [http-nio-8080-exec-3] o.s.jdbc.core.JdbcTemplate               : Executing prepared SQL query
+2022-11-30 10:17:44.710 DEBUG 1015 --- [http-nio-8080-exec-3] o.s.jdbc.core.JdbcTemplate               : Executing prepared SQL statement [select
+       count()                                                                                       as total,
+       countIf(status != '取消' and actual_landing_time <= (flight.schedule_landing_time + 15 * 60)) as ontimes,
+       countIf(status != '取消' and actual_landing_time > (flight.schedule_landing_time + 15 * 60))  as delays,
+       countIf(status = '取消')                                                                      as cancellations,
+       ontimes / total                                                                               as otp,
+       delays / total                                                                                as rod,
+       cancellations / total                                                                         as roc
+from flight
+where departure_airport in (select iata_code from airport where city = ?)
+  and landing_airport in (select iata_code from airport where city = ?)]
+2022-11-30 10:17:47.129 DEBUG 1015 --- [http-nio-8080-exec-5] o.s.jdbc.core.JdbcTemplate               : Executing prepared SQL query
+2022-11-30 10:17:47.129 DEBUG 1015 --- [http-nio-8080-exec-5] o.s.jdbc.core.JdbcTemplate               : Executing prepared SQL statement [select substring(flight_schedules, 1, 2)                                                             as category,
+       count()                                                                                       as total,
+       countIf(status != '取消' and actual_landing_time <= (flight.schedule_landing_time + 15 * 60)) as ontimes,
+       countIf(status != '取消' and actual_landing_time > (flight.schedule_landing_time + 15 * 60))  as delays,
+       countIf(status = '取消')                                                                      as cancellations,
+       ontimes / total                                                                               as otp,
+       delays / total                                                                                as rod,
+       cancellations / total                                                                         as roc
+from flight
+where departure_airport in (select iata_code from airport where city = ?)
+  and landing_airport in (select iata_code from airport where city = ?)
+group by substring(flight_schedules, 1, 2)
+having total > 100
+order by otp desc]
+2022-11-30 10:17:47.272 DEBUG 1015 --- [http-nio-8080-exec-5] o.s.jdbc.core.JdbcTemplate               : Executing prepared SQL query
+2022-11-30 10:17:47.272 DEBUG 1015 --- [http-nio-8080-exec-5] o.s.jdbc.core.JdbcTemplate               : Executing prepared SQL statement [SELECT airlines.name AS name, airlines.iata_code AS iata_code, airlines.location AS location FROM airlines WHERE airlines.iata_code = ?]
+2022-11-30 10:17:47.377 DEBUG 1015 --- [http-nio-8080-exec-5] o.s.jdbc.core.JdbcTemplate               : Executing prepared SQL query
+2022-11-30 10:17:47.377 DEBUG 1015 --- [http-nio-8080-exec-5] o.s.jdbc.core.JdbcTemplate               : Executing prepared SQL statement [SELECT airlines.name AS name, airlines.iata_code AS iata_code, airlines.location AS location FROM airlines WHERE airlines.iata_code = ?]
+2022-11-30 10:17:47.478 DEBUG 1015 --- [http-nio-8080-exec-5] o.s.jdbc.core.JdbcTemplate               : Executing prepared SQL query
+2022-11-30 10:17:47.478 DEBUG 1015 --- [http-nio-8080-exec-5] o.s.jdbc.core.JdbcTemplate               : Executing prepared SQL statement [SELECT airlines.name AS name, airlines.iata_code AS iata_code, airlines.location AS location FROM airlines WHERE airlines.iata_code = ?]
+2022-11-30 10:17:47.578 DEBUG 1015 --- [http-nio-8080-exec-5] o.s.jdbc.core.JdbcTemplate               : Executing prepared SQL query
+2022-11-30 10:17:47.578 DEBUG 1015 --- [http-nio-8080-exec-5] o.s.jdbc.core.JdbcTemplate               : Executing prepared SQL statement [SELECT airlines.name AS name, airlines.iata_code AS iata_code, airlines.location AS location FROM airlines WHERE airlines.iata_code = ?]
+2022-11-30 10:17:51.378 DEBUG 1015 --- [http-nio-8080-exec-7] o.s.jdbc.core.JdbcTemplate               : Executing prepared SQL query
+2022-11-30 10:17:51.379 DEBUG 1015 --- [http-nio-8080-exec-7] o.s.jdbc.core.JdbcTemplate               : Executing prepared SQL statement [select flight_schedules                                                                              as category,
+       count()                                                                                       as total,
+       countIf(status != '取消' and actual_landing_time <= (flight.schedule_landing_time + 15 * 60)) as ontimes,
+       countIf(status != '取消' and actual_landing_time > (flight.schedule_landing_time + 15 * 60))  as delays,
+       countIf(status = '取消')                                                                      as cancellations,
+       ontimes / total                                                                               as otp,
+       delays / total                                                                                as rod,
+       cancellations / total                                                                         as roc
+from flight
+where departure_airport in (select iata_code from airport where city = ?)
+  and landing_airport in (select iata_code from airport where city = ?)
+group by flight_schedules
+having total > 100
+order by otp desc
+limit 5]
+2022-11-30 10:18:33.260 DEBUG 1015 --- [http-nio-8080-exec-9] o.s.jdbc.core.JdbcTemplate               : Executing prepared SQL query
+2022-11-30 10:18:33.260 DEBUG 1015 --- [http-nio-8080-exec-9] o.s.jdbc.core.JdbcTemplate               : Executing prepared SQL statement [select distinct city from airport order by city]
+2022-11-30 10:35:00.969  INFO 1180 --- [main] com.g.fot.FlyOnTimeApplication           : Starting FlyOnTimeApplication using Java 17.0.3.1 on 192.168.0.105 with PID 1180 (/Users/gaven/Work/fly on time/backend/target/classes started by gaven in /Users/gaven/Work/fly on time/backend)
+2022-11-30 10:35:00.970  INFO 1180 --- [main] com.g.fot.FlyOnTimeApplication           : No active profile set, falling back to 1 default profile: "default"
+2022-11-30 10:35:01.200  INFO 1180 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2022-11-30 10:35:01.218  INFO 1180 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 15 ms. Found 3 JDBC repository interfaces.
+2022-11-30 10:35:01.415  INFO 1180 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-11-30 10:35:01.419  INFO 1180 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-11-30 10:35:01.419  INFO 1180 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2022-11-30 10:35:01.454  INFO 1180 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-11-30 10:35:01.454  INFO 1180 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 466 ms
+2022-11-30 10:35:01.823  INFO 1180 --- [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2022-11-30 10:35:01.901  INFO 1180 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2022-11-30 10:35:01.906  INFO 1180 --- [main] com.g.fot.FlyOnTimeApplication           : Started FlyOnTimeApplication in 1.122 seconds (JVM running for 1.424)
+2022-11-30 10:35:13.091  INFO 1180 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-11-30 10:35:13.091  INFO 1180 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2022-11-30 10:35:13.092  INFO 1180 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2022-11-30 10:35:13.272 DEBUG 1180 --- [http-nio-8080-exec-2] o.s.jdbc.core.JdbcTemplate               : Executing prepared SQL query
+2022-11-30 10:35:13.273 DEBUG 1180 --- [http-nio-8080-exec-2] o.s.jdbc.core.JdbcTemplate               : Executing prepared SQL statement [select distinct city from airport order by city]
