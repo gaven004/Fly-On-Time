@@ -9,15 +9,15 @@
   <title>Fly On Time - 准时到达</title>
 
   <!-- include common vendor stylesheets & fontawesome -->
-  <link rel="stylesheet" type="text/css" href="vendor/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="https://fastly.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
 
-  <link rel="stylesheet" type="text/css" href="vendor/fontawesome-free@5.15.3/css/fontawesome.min.css">
-  <link rel="stylesheet" type="text/css" href="vendor/fontawesome-free@5.15.3/css/regular.min.css">
-  <link rel="stylesheet" type="text/css" href="vendor/fontawesome-free@5.15.3/css/brands.min.css">
-  <link rel="stylesheet" type="text/css" href="vendor/fontawesome-free@5.15.3/css/solid.min.css">
+  <link rel="stylesheet" type="text/css" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/fontawesome.min.css">
+  <link rel="stylesheet" type="text/css" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/regular.min.css">
+  <link rel="stylesheet" type="text/css" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/brands.min.css">
+  <link rel="stylesheet" type="text/css" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/solid.min.css">
 
   <!-- include fonts -->
-  <link rel="stylesheet" type="text/css" href="vendor/opensans/opensans.css">
+  <link rel="stylesheet" type="text/css" href="https://fastly.jsdelivr.net/npm/open-sans-all@0.1.3/css/open-sans.min.css">
 
   <!-- ace.css -->
   <link rel="stylesheet" type="text/css" href="css/ace.min.css">
@@ -169,6 +169,28 @@
             </div><!-- /.row -->
 
           </div><!-- /.container -->
+        </div>
+
+        <div class="bgc-blue-l4 pb-3">
+          <div class="container container-plus py-5">
+            <h3 class="text-center text-dark-tp3 text-160 mb-5">分时段数据 <small class="text-orange-d4"><i> - 何时出发好</i></small></h3>
+            <div>
+              <div class="row justify-content-center mx-1 mx-lg-0 mt-3">
+                <div id="chartByHours" style="width: 100%;height:400px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="container container-plus py-5">
+            <h3 class="text-center text-dark-tp3 text-160 mb-5">分航空公司数据 <small class="text-orange-d4"><i> - 哪家更准点</i></small></h3>
+            <div>
+              <div class="row justify-content-center mx-1 mx-lg-0 mt-3">
+                <div id="chartByAirlines" style="width: 100%;height:400px;"></div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="bgc-blue-l4">
@@ -531,26 +553,6 @@
           </div><!-- /.container -->
         </div>
 
-        <div class="bgc-blue-l4 pb-3">
-          <div class="container container-plus py-5">
-            <h3 class="text-center text-dark-tp3 text-160 mb-5">分时段数据</h3>
-            <div>
-              <div class="row justify-content-center mx-1 mx-lg-0 mt-3">
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div class="container container-plus py-5">
-            <h3 class="text-center text-dark-tp3 text-160 mb-5">分航空公司数据</h3>
-            <div>
-              <div class="row justify-content-center mx-1 mx-lg-0 mt-3">
-              </div>
-            </div>
-          </div>
-        </div>
-
         <div class="bgc-blue-l4">
           <div class="container container-plus py-45">
             <div class="row">
@@ -621,10 +623,13 @@
 </div>
 
 <!-- include common vendor scripts used in demo pages -->
-<script src="vendor/jquery@3.6.0/dist/jquery.min.js"></script>
-<script src="vendor/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-<script src="vendor/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
-<script src="vendor/typeahead.js@0.11.1/dist/typeahead.bundle.min.js"></script>
+<script src="https://fastly.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://fastly.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://fastly.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
+<script src="https://fastly.jsdelivr.net/npm/typeahead.js@0.11.1/dist/typeahead.bundle.min.js"></script>
+<script src="https://fastly.jsdelivr.net/npm/countup.js@2.3.2/dist/countUp.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.0/dist/echarts.min.js"></script>
+<script src="https://fastly.jsdelivr.net/npm/echarts@5.4.0/theme/macarons.js"></script>
 
 <!-- include ace.js -->
 <script src="js/ace.min.js"></script>
